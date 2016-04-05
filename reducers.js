@@ -5,33 +5,36 @@ const initialState = {
     todos: []
 }
 
-function todoApp(state = initialState, action) {
+function todos(state = [], action) {
     switch (action.type) {
-        case SET_VISIBILITY_FILTER:
-            return Object.assign({}, state, {
-                visibilityFilter: action.filter
-            });
         case ADD_TODO:
-            return Object.assign({}, state, {
-                todos: [
-                    ...state.todos, {
-                        text: action.text,
-                        completed: false
-                    }
-                ]
-            });
+            return [
+                ...state, {
+                    text: action.text,
+                    completed: false
+                }
+            ];
         case COMPLETE_TODO:
-            return Object.assign({}, state, {
-                todos: state.todos.map((todo, index) => {
-                    if (index === action.index) {
-                        return Object.assign({}, todo, {
-                            completed: true
-                        })
-                    }
-                    return todo;
-                });
-            })
+            return Object.assign({}, todo, {
+                completed: true
+            });
         default:
             return state;
+    }
+}
+
+function visibilityFilter(state = SHOW_ALL, action) {
+    switch (action.type) {
+        case SET_VISIBILITY_FILTER:
+            return action.filter
+        default:
+            return state;
+    }
+}
+
+function todoApp(state = initialState, action) {
+    return {
+        visibilityFilter: visibilityFilter(state.visibilityFilter, action),
+        todos: todos: todos(state.todos, action)
     }
 }
